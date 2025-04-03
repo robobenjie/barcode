@@ -65,8 +65,9 @@ window.onload = () => {
         localStorage.setItem('barcodeHistory', JSON.stringify(historyItems));
     };
 
-    // Keep track of current barcode text
+    // Keep track of current barcode text and secret status
     let currentBarcodeText = defaultText;
+    let isCurrentBarcodeSecret = false;
 
     // Toggle fullscreen
     barcodeContainer.addEventListener('click', () => {
@@ -78,10 +79,14 @@ window.onload = () => {
                 width: 2,
                 height: 200,
                 fontSize: 30,
-                margin: 10
+                margin: 10,
+                displayValue: !isCurrentBarcodeSecret
             });
         } else {
-            JsBarcode("#barcode", currentBarcodeText, barcodeOptions);
+            JsBarcode("#barcode", currentBarcodeText, {
+                ...barcodeOptions,
+                displayValue: !isCurrentBarcodeSecret
+            });
         }
     });
 
@@ -90,6 +95,7 @@ window.onload = () => {
         if (text !== '') {
             try {
                 currentBarcodeText = text;
+                isCurrentBarcodeSecret = isSecret;
                 const options = {
                     ...barcodeOptions,
                     displayValue: !isSecret
