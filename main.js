@@ -3,6 +3,7 @@ window.onload = () => {
     const input = document.getElementById('barcodeInput');
     const saveButton = document.getElementById('saveButton');
     const historyContainer = document.getElementById('historyContainer');
+    const barcodeContainer = document.querySelector('.barcode-container');
     const defaultText = 'Hello World!';
 
     // Barcode options
@@ -15,11 +16,41 @@ window.onload = () => {
         margin: 5
     };
 
+    // Toggle fullscreen
+    barcodeContainer.addEventListener('click', () => {
+        barcodeContainer.classList.toggle('fullscreen');
+        
+        // Regenerate barcode with appropriate dimensions
+        const currentText = input.value || defaultText;
+        if (barcodeContainer.classList.contains('fullscreen')) {
+            JsBarcode("#barcode", currentText, {
+                ...barcodeOptions,
+                width: 2,
+                height: 200,
+                fontSize: 30,
+                margin: 10
+            });
+        } else {
+            JsBarcode("#barcode", currentText, barcodeOptions);
+        }
+    });
+
     // Function to update barcode
     const updateBarcode = (text) => {
         if (text !== '') {
             try {
-                JsBarcode("#barcode", text, barcodeOptions);
+                // Use appropriate dimensions based on fullscreen state
+                if (barcodeContainer.classList.contains('fullscreen')) {
+                    JsBarcode("#barcode", text, {
+                        ...barcodeOptions,
+                        width: 2,
+                        height: 200,
+                        fontSize: 30,
+                        margin: 10
+                    });
+                } else {
+                    JsBarcode("#barcode", text, barcodeOptions);
+                }
             } catch (error) {
                 console.error('Failed to generate barcode:', error);
             }

@@ -26,6 +26,19 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.barcode-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
 }
 
 #barcode {
@@ -33,6 +46,13 @@ body {
     transform-origin: center;
     max-width: none;
     height: 80px;
+    transition: all 0.3s ease;
+}
+
+.fullscreen #barcode {
+    height: 90vw;
+    max-height: none;
+    max-width: none;
 }
 
 .controls {
