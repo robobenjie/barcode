@@ -29,13 +29,15 @@ window.onload = () => {
         localStorage.setItem('barcodeHistory', JSON.stringify(historyItems));
     };
 
+    // Keep track of current barcode text
+    let currentBarcodeText = defaultText;
+
     // Toggle fullscreen
     barcodeContainer.addEventListener('click', () => {
         barcodeContainer.classList.toggle('fullscreen');
         
-        const currentText = input.value || defaultText;
         if (barcodeContainer.classList.contains('fullscreen')) {
-            JsBarcode("#barcode", currentText, {
+            JsBarcode("#barcode", currentBarcodeText, {
                 ...barcodeOptions,
                 width: 2,
                 height: 200,
@@ -43,7 +45,7 @@ window.onload = () => {
                 margin: 10
             });
         } else {
-            JsBarcode("#barcode", currentText, barcodeOptions);
+            JsBarcode("#barcode", currentBarcodeText, barcodeOptions);
         }
     });
 
@@ -51,6 +53,7 @@ window.onload = () => {
     const updateBarcode = (text) => {
         if (text !== '') {
             try {
+                currentBarcodeText = text; // Update the current barcode text
                 if (barcodeContainer.classList.contains('fullscreen')) {
                     JsBarcode("#barcode", text, {
                         ...barcodeOptions,
