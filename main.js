@@ -16,11 +16,23 @@ window.onload = () => {
         margin: 5
     };
 
+    // Load history from localStorage
+    const loadHistory = () => {
+        const savedHistory = localStorage.getItem('barcodeHistory');
+        return savedHistory ? JSON.parse(savedHistory) : [defaultText];
+    };
+
+    // Save history to localStorage
+    const saveHistory = () => {
+        const historyItems = Array.from(historyContainer.querySelectorAll('.history-button'))
+            .map(button => button.textContent);
+        localStorage.setItem('barcodeHistory', JSON.stringify(historyItems));
+    };
+
     // Toggle fullscreen
     barcodeContainer.addEventListener('click', () => {
         barcodeContainer.classList.toggle('fullscreen');
         
-        // Regenerate barcode with appropriate dimensions
         const currentText = input.value || defaultText;
         if (barcodeContainer.classList.contains('fullscreen')) {
             JsBarcode("#barcode", currentText, {
@@ -39,7 +51,6 @@ window.onload = () => {
     const updateBarcode = (text) => {
         if (text !== '') {
             try {
-                // Use appropriate dimensions based on fullscreen state
                 if (barcodeContainer.classList.contains('fullscreen')) {
                     JsBarcode("#barcode", text, {
                         ...barcodeOptions,
@@ -65,7 +76,7 @@ window.onload = () => {
         const button = document.createElement('button');
         button.className = 'history-button';
         button.textContent = text;
-        button.onclick = () => updateBarcode(text); // Only update barcode, not input
+        button.onclick = () => updateBarcode(text);
 
         const deleteButton = document.createElement('button');
         deleteButton.className = 'delete-button';
@@ -74,12 +85,14 @@ window.onload = () => {
             e.stopPropagation();
             if (confirm('Delete this barcode from history?')) {
                 historyItem.remove();
+                saveHistory(); // Save after deletion
             }
         };
 
         historyItem.appendChild(button);
         historyItem.appendChild(deleteButton);
         historyContainer.insertBefore(historyItem, historyContainer.firstChild);
+        saveHistory(); // Save after addition
     };
 
     // Save current text to history
@@ -88,7 +101,7 @@ window.onload = () => {
         if (text !== '') {
             addToHistory(text);
             updateBarcode(text);
-            input.value = ''; // Clear input after saving
+            input.value = '';
         }
     };
 
@@ -111,6 +124,12 @@ window.onload = () => {
     // Save button click handler
     saveButton.addEventListener('click', saveCurrentText);
 
-    // Add initial text to history
-    addToHistory(defaultText);
+    // Initialize history from localStorage
+    const savedHistory = loadHistory();
+    savedHistory.reverse().forEach(text => addToHistory(text));
+    
+    // Show the most recent barcode
+    if (savedHistory.length > 0) {
+        updateBarcode(savedHistory[savedHistory.length - 1]);
+    }
 }; 
