@@ -222,10 +222,103 @@ window.onload = () => {
     });
     saveButton.addEventListener('touchcancel', clearTimer);
 
+    // Add touch drag support
+    let touchDragItem = null;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e, item) => {
+        touchDragItem = item;
+        touchStartY = e.touches[0].clientY;
+        item.classList.add('dragging');
+    };
+
+    const handleTouchMove = (e) => {
+        if (!touchDragItem) return;
+        e.preventDefault();
+
+        const touchY = e.touches[0].clientY;
+        const allItems = [...historyContainer.querySelectorAll('.history-item')];
+        const currentIndex = allItems.indexOf(touchDragItem);
+
+        allItems.forEach((item, index) => {
+            if (item === touchDragItem) return;
+
+            const rect = item.getBoundingClientRect();
+            const itemMiddle = rect.top + rect.height / 2;
+
+            if (touchY < itemMiddle && index < currentIndex) {
+                item.parentNode.insertBefore(touchDragItem, item);
+            } else if (touchY > itemMiddle && index > currentIndex) {
+                item.parentNode.insertBefore(touchDragItem, item.nextSibling);
+            }
+        });
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchDragItem) return;
+        touchDragItem.classList.remove('dragging');
+        touchDragItem = null;
+        saveHistory();
+    };
+
+    // Add touch event listeners to history container
+    historyContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+    historyContainer.addEventListener('touchend', handleTouchEnd);
+
+    // Define touch handlers before addToHistory
+    const addTouchHandlers = (historyItem) => {
+        historyItem.addEventListener('touchstart', (e) => {
+            // Only start drag after a short delay to allow for normal taps
+            const touchTimer = setTimeout(() => {
+                handleTouchStart(e, historyItem);
+            }, 200);
+
+            historyItem.addEventListener('touchend', () => {
+                clearTimeout(touchTimer);
+            }, { once: true });
+        });
+    };
+
     // Modified addToHistory function
     const addToHistory = (text, displayName = null) => {
         const historyItem = document.createElement('div');
         historyItem.className = 'history-item';
+        
+        // Only enable drag on non-touch devices
+        if (!('ontouchstart' in window)) {
+            historyItem.draggable = true;
+            
+            // Drag event handlers
+            historyItem.addEventListener('dragstart', (e) => {
+                console.log('dragstart');
+                historyItem.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            historyItem.addEventListener('dragend', () => {
+                historyItem.classList.remove('dragging');
+                saveHistory(); // Save after drag ends
+            });
+
+            historyItem.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const draggingItem = document.querySelector('.dragging');
+                if (draggingItem && draggingItem !== historyItem) {
+                    const allItems = [...historyContainer.querySelectorAll('.history-item')];
+                    const currentPos = allItems.indexOf(historyItem);
+                    const draggingPos = allItems.indexOf(draggingItem);
+                    
+                    if (currentPos < draggingPos) {
+                        historyItem.parentNode.insertBefore(draggingItem, historyItem);
+                    } else {
+                        historyItem.parentNode.insertBefore(draggingItem, historyItem.nextSibling);
+                    }
+                }
+            });
+        } else {
+            // Add touch handlers for touch devices
+            addTouchHandlers(historyItem);
+        }
 
         const button = document.createElement('button');
         button.className = 'history-button';

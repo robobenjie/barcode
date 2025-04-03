@@ -127,6 +127,16 @@ textarea:focus {
 .history-item {
     display: flex;
     gap: 4px;
+    cursor: grab;
+}
+
+.history-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.history-item.drag-over {
+    border-top: 2px solid #7aa2f7;
 }
 
 .history-button {
