@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="layout">
+            <div class="barcode-container">
+                <img id="barcode"/>
+            </div>
+            <div class="controls">
+                <div class="input-container">
+                    <input 
+                        id="barcodeInput" 
+                        type="text"
+                        placeholder="Enter text to generate barcode..."
+                    />
+                    <button id="saveButton">✓</button>
+                </div>
+                <div class="history-container" id="historyContainer">
+                    <!-- History buttons will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="jsBarcode.js"></script>
+    <script src="main.js"></script>
+</body>
+</html> 

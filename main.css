@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.layout {
+    display: flex;
+    gap: 20px;
+}
+
+.barcode-container {
+    background: white;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 80px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#barcode {
+    transform: rotate(-90deg);
+    transform-origin: center;
+    max-width: none;
+    height: 80px;
+}
+
+.controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0; /* Allows flex item to shrink below content size */
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #007AFF;
+}
+
+.input-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+#barcodeInput {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#barcodeInput:focus {
+    outline: none;
+    border-color: #007AFF;
+}
+
+#saveButton {
+    width: 44px;
+    border: none;
+    border-radius: 8px;
+    background: #007AFF;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#saveButton:hover {
+    background: #0056b3;
+}
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item {
+    display: flex;
+    gap: 8px;
+}
+
+.history-button {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.history-button:hover {
+    border-color: #007AFF;
+    background: #f0f7ff;
+}
+
+.delete-button {
+    width: 44px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    color: #ff3b30;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    border-color: #ff3b30;
+    background: #fff2f2;
+} 
