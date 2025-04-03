@@ -271,4 +271,9 @@ textarea:focus {
 
 #confirmModal.delete:hover {
     background: #ff8b98;
+}
+
+.trailing-space {
+    background: #4d5269; 
+    border-radius: 2px;
 } 

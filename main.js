@@ -59,7 +59,7 @@ window.onload = () => {
     const saveHistory = () => {
         const historyItems = Array.from(historyContainer.querySelectorAll('.history-button'))
             .map(button => ({
-                text: button.dataset.secret || button.textContent,
+                text: button.dataset.secret || button.dataset.originalText,
                 displayName: button.dataset.secret ? button.textContent : null
             }));
         localStorage.setItem('barcodeHistory', JSON.stringify(historyItems));
@@ -293,6 +293,20 @@ window.onload = () => {
         });
     };
 
+    // Helper function to highlight trailing whitespace
+    const highlightTrailingWhitespace = (text) => {
+        const trimmed = text.trimEnd();
+        const trailing = text.slice(trimmed.length);
+        if (!trailing) return { html: text, original: text };
+        
+        // Replace each space with a non-breaking space for display
+        const visibleSpaces = trailing.replace(/ /g, '\u00A0');
+        return {
+            html: `${trimmed}<span class="trailing-space">${visibleSpaces}</span>`,
+            original: text
+        };
+    };
+
     // Modified addToHistory function
     const addToHistory = (text, displayName = null) => {
         const historyItem = document.createElement('div');
@@ -336,12 +350,15 @@ window.onload = () => {
 
         const button = document.createElement('button');
         button.className = 'history-button';
-        button.textContent = displayName || text;
+        const displayText = displayName || text;
+        const { html, original } = highlightTrailingWhitespace(displayText);
+        button.innerHTML = html;
+        button.dataset.originalText = original;  // Store the original text with spaces
         if (displayName) {
             button.dataset.secret = text;
             button.classList.add('secret-item');
         }
-        button.onclick = () => updateBarcode(text, !!displayName);
+        button.onclick = () => updateBarcode(button.dataset.secret || button.dataset.originalText, !!displayName);
 
         const deleteButton = document.createElement('button');
         deleteButton.className = 'delete-button';
