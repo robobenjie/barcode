@@ -186,8 +186,10 @@ textarea:focus {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
+    justify-content: center;  /* Back to center */
+    align-items: flex-start;  /* Align to top */
+    padding-top: 10vh;  /* Reduced padding to move it higher */
+    box-sizing: border-box;
     z-index: 2000;
 }
 
@@ -197,6 +199,7 @@ textarea:focus {
     border-radius: 8px;
     width: 80%;
     max-width: 400px;
+    /* Remove margin: 0 auto since we're using justify-content: center */
 }
 
 .modal-content h3 {

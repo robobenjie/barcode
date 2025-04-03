@@ -130,6 +130,14 @@ window.onload = () => {
             displayNameInput.focus();
         }
 
+        // Handle Enter key in input
+        const handleEnter = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleConfirm();
+            }
+        };
+
         // Update modal handlers
         const handleConfirm = () => {
             onConfirm(displayNameInput.value.trim());
@@ -145,10 +153,16 @@ window.onload = () => {
         const cleanup = () => {
             confirmModal.removeEventListener('click', handleConfirm);
             cancelModal.removeEventListener('click', handleCancel);
+            if (inputMode) {
+                displayNameInput.removeEventListener('keypress', handleEnter);
+            }
         };
 
         confirmModal.addEventListener('click', handleConfirm);
         cancelModal.addEventListener('click', handleCancel);
+        if (inputMode) {
+            displayNameInput.addEventListener('keypress', handleEnter);
+        }
     };
 
     // Modified delete handler
